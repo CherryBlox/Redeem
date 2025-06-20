@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Redeem Code</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #121212;
+      color: #f0f0f0;
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    h1 {
+      color: #00ffc3;
+      animation: fadeIn 1s ease;
+    }
+
+    input {
+      padding: 12px;
+      font-size: 16px;
+      margin: 15px;
+      width: 250px;
+      background: #1e1e1e;
+      border: 1px solid #333;
+      border-radius: 8px;
+      color: white;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #00ffc3;
+    }
+
+    button {
+      padding: 12px 20px;
+      font-size: 16px;
+      background-color: #00ffc3;
+      border: none;
+      color: black;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #00cfa2;
+      transform: scale(1.05);
+    }
+
+    #result {
+      font-size: 18px;
+      font-weight: bold;
+      margin-top: 30px;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎁 Redeem Your Code</h1>
+  <input type="text" id="codeInput" placeholder="Enter your redeem code">
+  <br>
+  <button onclick="redeemCode()">Redeem</button>
+  <p id="result"></p>
+
+  <script>
+    function getCodes() {
+      return JSON.parse(localStorage.getItem("redeemCodes") || "{}");
+    }
+
+    function redeemCode() {
+      const code = document.getElementById("codeInput").value.trim().toUpperCase();
+      const result = document.getElementById("result");
+      const codes = getCodes();
+
+      if (codes[code]) {
+        result.textContent = "✅ " + codes[code];
+        result.style.color = "#00ffc3";
+      } else {
+        result.textContent = "❌ Invalid or used code!";
+        result.style.color = "#ff4d4d";
+      }
+    }
+  </script>
+
+</body>
+</html>

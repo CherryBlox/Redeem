@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login - Redeem System</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #121212;
+      color: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    h2 {
+      color: #00ffc3;
+      animation: fadeIn 1s ease;
+    }
+
+    input {
+      padding: 12px;
+      font-size: 16px;
+      margin: 10px;
+      border-radius: 8px;
+      background-color: #1e1e1e;
+      color: white;
+      border: 1px solid #333;
+      outline: none;
+      width: 250px;
+      text-align: center;
+    }
+
+    input:focus {
+      border: 1px solid #00ffc3;
+    }
+
+    button {
+      background-color: #00ffc3;
+      color: #000;
+      padding: 12px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #00cfa2;
+      transform: scale(1.05);
+    }
+
+    #msg {
+      color: #ff4d4d;
+      margin-top: 10px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <h2>🔐 Enter Admin Password</h2>
+  <input type="password" id="passInput" placeholder="Enter password">
+  <button onclick="checkPassword()">Login</button>
+  <p id="msg"></p>
+
+  <script>
+    const PASSWORD = "admin123"; // Change your password here
+
+    function checkPassword() {
+      const input = document.getElementById("passInput").value;
+      if (input === PASSWORD) {
+        window.location.href = "admin.html";
+      } else {
+        document.getElementById("msg").textContent = "❌ Wrong password!";
+      }
+    }
+  </script>
+</body>
+</html>

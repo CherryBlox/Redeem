@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel - Secure Redeem Codes</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #121212;
+      color: #f0f0f0;
+      padding: 30px;
+      text-align: center;
+    }
+
+    h2, h3 {
+      color: #00ffc3;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    input, button {
+      padding: 12px;
+      font-size: 16px;
+      margin: 10px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      transition: 0.3s ease;
+    }
+
+    input {
+      background-color: #1e1e1e;
+      color: white;
+      border: 1px solid #333;
+    }
+
+    input:focus {
+      border: 1px solid #00ffc3;
+    }
+
+    button {
+      background-color: #00ffc3;
+      color: #000;
+      cursor: pointer;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      background-color: #00cfa2;
+    }
+
+    .code-list {
+      max-width: 700px;
+      margin: 30px auto;
+    }
+
+    .code-box {
+      background-color: #1e1e1e;
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(0, 255, 195, 0.1);
+      animation: slideIn 0.4s ease;
+    }
+
+    .code-box span {
+      font-size: 17px;
+    }
+
+    .delete-btn {
+      background-color: #ff4d4d;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .delete-btn:hover {
+      background-color: #c90000;
+      transform: scale(1.1);
+    }
+
+    .logout-btn {
+      background-color: #444;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      margin-top: 30px;
+    }
+
+    .logout-btn:hover {
+      background-color: #666;
+    }
+
+    a {
+      display: inline-block;
+      margin-top: 30px;
+      color: #00ffc3;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    a:hover {
+      color: #00cfa2;
+      transform: scale(1.05);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+
+  <!-- 🔒 Secure Entry Check -->
+  <script>
+    if (localStorage.getItem("isAdmin") !== "true") {
+      alert("🚫 Access Denied! You are not logged in.");
+      window.location.href = "index.html";
+    }
+  </script>
+</head>
+
+<body>
+
+  <h2>⚙️ Admin Panel – Manage Redeem Codes</h2>
+
+  <input type="text" id="code" placeholder="Enter Code (e.g. OP123)">
+  <input type="text" id="reward" placeholder="Enter Reward (e.g. 500 Coins)">
+  <button onclick="addCode()">➕ Add Code</button>
+
+  <h3>📜 All Redeem Codes</h3>
+  <div class="code-list" id="codeList"></div>
+
+  <button class="logout-btn" onclick="logout()">🚪 Logout</button><br>
+  <a href="redeem.html">🎁 Go to Redeem Page</a>
+
+  <script>
+    // 🔐 Logout Function
+    function logout() {
+      localStorage.removeItem("isAdmin");
+      window.location.href = "index.html";
+    }
+
+    // 🧠 LocalStorage Functions
+    function getCodes() {
+      return JSON.parse(localStorage.getItem("redeemCodes") || "{}");
+    }
+
+    function saveCodes(codes) {
+      localStorage.setItem("redeemCodes", JSON.stringify(codes));
+    }
+
+    function addCode() {
+      const code = document.getElementById("code").value.trim().toUpperCase();
+      const reward = document.getElementById("reward").value.trim();
+      if (!code || !reward) {
+        alert("Please enter both Code and Reward.");
+        return;
+      }
+      const codes = getCodes();
+      codes[code] = reward;
+      saveCodes(codes);
+      displayCodes();
+      document.getElementById("code").value = "";
+      document.getElementById("reward").value = "";
+    }
+
+    function deleteCode(code) {
+      const codes = getCodes();
+      if (codes[code]) {
+        delete codes[code];
+        saveCodes(codes);
+        displayCodes();
+      }
+    }
+
+    function displayCodes() {
+      const codes = getCodes();
+      const codeList = document.getElementById("codeList");
+      codeList.innerHTML = "";
+
+      const keys = Object.keys(codes);
+      if (keys.length === 0) {
+        codeList.innerHTML = "<p>No codes available yet.</p>";
+        return;
+      }
+
+      keys.forEach(code => {
+        const reward = codes[code];
+        const box = document.createElement("div");
+        box.className = "code-box";
+        box.innerHTML = `
+          <span><strong>${code}</strong> ➜ ${reward}</span>
+          <button class="delete-btn" onclick="deleteCode('${code}')">Delete</button>
+        `;
+        codeList.appendChild(box);
+      });
+    }
+
+    // 🚀 Load codes on page load
+    displayCodes();
+  </script>
+
+</body>
+</html>
